@@ -1,20 +1,92 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-grid id="mainHeader">
+      <ion-row>
+        <ion-col> </ion-col>
+        <ion-col class="ion-justify-content-center" class="main-title">
+          <a routerLink="/" routerLinkActive="active"
+            ><ion-title>
+              <div class="title-container">
+                <ion-icon
+                  id="mainIcon"
+                  name="newspaper"
+                  size="large"
+                ></ion-icon>
+                <p id="mainLabel">Blog</p>
+              </div>
+            </ion-title></a
+          >
+        </ion-col>
+        <ion-col size="6"> </ion-col>
+
+        <ion-col class="ion-justify-content-center">
+          <ion-buttons ion-button icon-only>
+            <ion-button (click)="clearNotifications()">
+              <ion-icon slot="icon-only" name="notifications"></ion-icon>
+              <ion-badge
+                id="notifNumber"
+                *ngIf="notificationNumber"
+                color="primary"
+                >{{notificationNumber}}</ion-badge
+              >
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div id="mainSection">
+    <div id="addPost">
+      <ion-card>
+        <ion-item>
+          <ion-label position="floating">Add Post</ion-label>
+          <ion-textarea #newPost rows="6"></ion-textarea>
+        </ion-item>
+        <ion-item>
+          <ion-buttons ion-button slot="end">
+            <ion-button (click)="addPost(newPost.value); newPost.value = ''">
+              Add
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-card>
+    </div>
+    <div id="postsContainer">
+      <ion-card class="post" *ngFor="let post of posts | async">
+        <ion-card-content>
+          <div class="post-toolbar">
+            <ion-buttons ion-button id="deleteBtn">
+              <ion-button (click)="deletePost(post.key)"> x </ion-button>
+            </ion-buttons>
+          </div>
+          <div><p>{{post.text}}</p></div>
+        </ion-card-content>
+        <ion-item class="ion-activated">
+          <ion-input #commentText placeholder="Comment..."></ion-input>
+          <ion-buttons ion-button class="post-buttons">
+            <ion-button (click)="addPostComment(post.key,commentText.value)">
+              <ion-icon name="send" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+        <ion-list>
+          <ion-item *ngFor="let comment of post.comments | keyvalue">
+            <ion-label>{{comment.value.text}}</ion-label>
+            <ion-buttons ion-button slot="end">
+              <ion-button (click)="addCommentLike(post.key,comment.key)">
+                <ion-icon
+                  *ngIf="!comment.value.likes"
+                  name="heart-outline"
+                ></ion-icon>
+                <ion-icon *ngIf="comment.value.likes" name="heart"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-list>
+      </ion-card>
+    </div>
   </div>
 </ion-content>

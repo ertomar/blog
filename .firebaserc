@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "fir-9d3e9": {
+      "hosting": {
+        "app": [
+          "fir-9d3e9"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "fir-9d3e9"
+  }
+}
